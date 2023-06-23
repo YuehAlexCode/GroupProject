@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "./Navbar";
 import Placeholder from "../components/Placeholder";
 
 const Dashboard = (props) => {

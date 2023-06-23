@@ -43,10 +43,9 @@ const RegisterForm = () => {
         e.preventDefault()
         if (formValidator()) {
             axios.post('http://localhost:8000/api/users/register', userInfo, {withCredentials: true})
-                .then(res => console.log(res))
-                
-                .catch(err => console.log(err),
-                    navigate("/user/dashboard"))
+                .then(res => console.log(res),
+                    navigate("/Logged"))
+                .catch(err => console.log(err))
             }
             else{
                 setErrors({
