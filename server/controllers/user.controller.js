@@ -49,6 +49,12 @@ module.exports = {
     }
 }
 
+module.exports.findAllUsers = (req, res) =>{
+    User.find({})
+        .then((allTourneys) => {res.json(allTourneys);})
+        .catch(err=> res.json({message: 'Something went wrong', error: err}))
+},
+
 module.exports.findOneUser = (req, res) =>{
     User.findOne({_id: req.params.id })
         .then((findUser) => res.json(findUser))

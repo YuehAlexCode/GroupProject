@@ -3,8 +3,8 @@ import React from "react";
 const Placeholder = () => {
 
     return (
-        <div>
-            <h2>Placeholder</h2>
+        <div className="container">
+            <h2 className="text-center">Placeholder</h2>
         </div>
       )
   };
