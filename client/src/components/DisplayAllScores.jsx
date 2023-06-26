@@ -1,5 +1,6 @@
 import React, { useEffect,useState } from "react";
 import axios from "axios";
+import { StyledHighScore } from './styles/StyledHighScore';
 
 const DisplayAll = (props) => {
     const [userData, setUserData] = useState([]);
@@ -15,8 +16,8 @@ const DisplayAll = (props) => {
     }, []);
 
     return (
-      <div  className="container bg-light">
-        <div className="col-md-4 mx-auto">
+      <StyledHighScore  className="container bg-light">
+        <div className="col-md-6 mx-auto">
         <table className="table table-dark table-striped">
           <thead>
             <tr>
@@ -36,7 +37,7 @@ const DisplayAll = (props) => {
           </tbody>
         </table>
         </div>
-      </div>
+      </StyledHighScore>
     );
   };
 

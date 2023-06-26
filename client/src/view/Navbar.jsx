@@ -39,12 +39,12 @@ const Navbar = () => {
       }
       return isValid
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
       e.preventDefault()
       if (formValidator()) {
           axios.post('http://localhost:8000/api/users/login', userInfo, {withCredentials: true})
               .then(res => console.log(res),
-                navigate("/Logged"))
+                navigate("/Logged/:id"))
               .catch(err => console.log(err))
           }
           else{

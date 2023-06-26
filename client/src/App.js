@@ -12,7 +12,7 @@ function App() {
         <Routes>
             <Route  path="users/register" element={<Register/>}/>
             <Route path="/" element={<Dashboard/>} />
-            <Route path="/Logged" element={<LoggedinDash/>} />
+            <Route path="/Logged/:id" element={<LoggedinDash/>} />
             <Route  path="*" element={<h1>404- Not found!</h1>}/>         
         </Routes>
     </div>
