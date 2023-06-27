@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { createStage, checkCollision } from '../gameHelpers';
+import { createStage, checkCollision } from './gameHelpers';
 import { StyledTetrisWrapper, StyledTetris } from './styles/StyledTetris';
 
 import { useInterval } from '../hooks/useInterval';
@@ -108,9 +108,11 @@ const Tetris = () => {
       onKeyDown={e => move(e)}
       onKeyUp={keyUp}
     >
+      <div className='shift'>
       <StyledTetris>
         <Stage stage={stage} />
-        <aside>
+        <aside className='shift'>
+        <h3 className='title text-light'>Tetris Game</h3>
           {gameOver ? (
             <Display gameOver={gameOver} text="Game Over" />
           ) : (
@@ -124,7 +126,11 @@ const Tetris = () => {
           <QuitButton callback={endGame} />
         </aside>
       </StyledTetris>
+
+      
+      </div>
     </StyledTetrisWrapper>
+    
   );
 };
 

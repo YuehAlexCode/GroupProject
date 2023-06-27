@@ -58,20 +58,16 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-dark ">
     <div className="container-fluid">
-        <div className="navbar-brand text-light">Tetris</div>
-        <button type="button" className="navbar-toggler " data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-            <span className="navbar-toggler-icon"></span>
-        </button>
         <div className="collapse navbar-collapse" id="navbarCollapse">
             <div className="navbar-nav ms-auto">
-                <a href="/" className="nav-item nav-link text-light">Home</a>
+                <a href="/" className="nav-item nav-link text-light ">Home</a>
                 <div className="dropdown">
                   <button className="nav-item nav-link text-light" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Login
                   </button>
-                  <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <div className="dropdown-menu" onClick={handleItemClick} aria-labelledby="dropdownMenuButton">
                       <form action="" className="col-md-10 mx-auto" onSubmit={handleSubmit}>
-                        <div onClick={handleItemClick} className="form-group">
+                        <div className="form-group">
                             <label htmlFor="email">Email:</label>
                             <input type="text" className="form-control" name="email" id="email" value={userInfo.email}  onChange={onChangeHandler}/> 
                         </div>

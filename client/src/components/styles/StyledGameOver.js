@@ -4,6 +4,7 @@ export const StyledGameOver = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 20px;
   color: #999;
   background: #000;
   position: absolute;

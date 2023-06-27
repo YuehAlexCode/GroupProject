@@ -8,6 +8,7 @@ const StyledEndButton = styled.button`
   padding: 20px;
   min-height: 30px;
   width: 100%;
+  border-radius: 20px;
   border: none;
   color: white;
   background: #333;
@@ -15,7 +16,7 @@ const StyledEndButton = styled.button`
   font-size: 1rem;
   outline: none;
   cursor: pointer;
-`;
+  `;
 
 
 const QuitButton = ({ callback }) => (
