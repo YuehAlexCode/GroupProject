@@ -1,16 +1,15 @@
 import React from "react";
-import LoginForm from "../components/LoginForm";
-import Navbar from "../components/Navbar";
+import Navbar from "./Navbar";
+import User from "../components/User";
 
-const Login = (props) => {
+const Dashboard = (props) => {
     return (
         <div className="container">
             <Navbar/>
             <div  className="col-md-12 mx-auto bg-light">
-                <LoginForm/>
+                <User/>
             </div>
         </div>
     );
 };
-
-export default Login;
+export default Dashboard

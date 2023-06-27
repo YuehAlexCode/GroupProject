@@ -1,6 +1,6 @@
 import React from "react";
 import RegisterForm from "../components/RegisterForm";
-import Navbar from "../components/Navbar";
+import Navbar from "./Navbar";
 
 const Register = (props) => {
     return (
