@@ -18,8 +18,9 @@ const Tetris = () => {
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
 
-  const[finalScore,setFinalScore]= useState("");
+  const [finalScore,setFinalScore] = useState();
 
+  const [gotEmail,SetGotEmail] = useState("");
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
   const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(
@@ -31,6 +32,7 @@ const Tetris = () => {
     if (storedUserInfo) {
       const email = JSON.parse(storedUserInfo);
       fetchData(email);
+      SetGotEmail(email)
     }
   }, []);
 
@@ -48,21 +50,24 @@ const Tetris = () => {
 
 
 
-    axios
-    .put(`http://localhost:8000/api/users/` + email, { highScore: finalScore })
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err.res.data.err.errors);
-    });
+  
 
   };
-  const handleGameOver = (score) => {
-    setFinalScore(score);
+  const handleButtonPress = async () => {
+    const scoreValue = Number(finalScore); // Convert the score to a number
 
-
-};
+    if (isNaN(scoreValue)) {
+      console.error('Invalid score value:', finalScore);
+      console.log(finalScore)
+      return;
+    }
+    try {
+      const response = await axios.put(`http://localhost:8000/api/users/${gotEmail}`, { highScore: finalScore });
+      console.log('Score updated successfully!', response.data);
+    } catch (error) {
+      console.error('Error updating score:', error);
+    }
+  };
 
 
 
@@ -163,10 +168,9 @@ const Tetris = () => {
         <aside className='shift'>
         <h3 className='title text-light'>Tetris Game</h3>
           {gameOver ? (
-            // <Display gameOver={gameOver} text="Game Over" />
             <div>
               <Display gameOver={gameOver} text="Game Over" />
-              <button className="btn btn-lg btn-danger" onClick={() => handleGameOver(score)}>{score}</button>
+              <button onClick={handleButtonPress}>Update Score {score}</button>
             </div>
             
           ) : (

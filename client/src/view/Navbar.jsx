@@ -93,9 +93,9 @@ const Navbar = () => {
         
             <div className="navbar-nav ms-auto">
 
-                <a href="/" className="nav-item nav-link text-light ">Home</a>
+                <a href="/" className="nav-item nav-link text-light uil uil-house-user">Home</a>
                 <div className="dropdown">
-                  <button className="nav-item nav-link text-light" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <button className="nav-item nav-link text-light uil uil-signin" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Login
                   </button>
                   <div className="dropdown-menu" onClick={handleItemClick} aria-labelledby="dropdownMenuButton">
@@ -118,7 +118,7 @@ const Navbar = () => {
                       </form>  
                   </div>
                 </div>
-                <button href="#" onClick={logout} className="nav-item nav-link text-light">Logout</button>
+                <button href="#" onClick={logout} className="nav-item nav-link text-light uil uil-signout">Logout</button>
             </div>
         </div>
     </div>
