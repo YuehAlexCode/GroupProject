@@ -63,7 +63,7 @@ const DisplayAll = (props) => {
                              DELETE
                            </button>
                           ) : (
-                              <div className="text-light display-7">Not Logged</div>
+                              <div className="text-light display-7">X</div>
                           )}
                       </div>
                     </td>
