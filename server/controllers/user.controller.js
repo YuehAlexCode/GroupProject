@@ -55,8 +55,21 @@ module.exports.findAllUsers = (req, res) =>{
         .catch(err=> res.json({message: 'Something went wrong', error: err}))
 },
 
-module.exports.findOneUser = (req, res) =>{
-    User.findOne({_id: req.params.id })
+module.exports.findOneEmail = (req, res) =>{
+    User.findOne({email: req.params.email })
         .then((findUser) => res.json(findUser))
+        .catch((err) => console({message: 'Something went wrong', error: err}))
+}
+
+module.exports.postOneEmail = (req, res) => {
+    User.findOneAndUpdate({ email: req.params.email }, req.body, {
+        new: true})
+        .then((updatedScore) => res.json(updatedScore))
+        .catch((err) => console.log({message: 'Something went wrong', error: err}))
+}
+
+module.exports.deleteUser = (req, res) => {
+    User.deleteOne({ _id: req.params.id })
+        .then((deletedId) => res.json(deletedId))
         .catch((err) => console({message: 'Something went wrong', error: err}))
 }

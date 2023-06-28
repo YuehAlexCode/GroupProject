@@ -1,39 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const User = () => {
-  const { id } = useParams();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+function User() {
+  const [userData, setUserData] = useState([]);
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(`/api/users/${id}`);
-        setUser(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    const storedUserInfo = localStorage.getItem('userInfo');
 
-    fetchUser();
-  }, [id]);
+    if (storedUserInfo) {
+      const email = JSON.parse(storedUserInfo);
+      fetchData(email);
+    }
+  }, []);
 
-  if (loading) {
-    return <p>Loading user...</p>;
-  }
 
-  if (!user) {
-    return <p>User not found.</p>;
-  }
+  const fetchData = async (email) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/users/` + email);
+          setUserData(response.data);
+          console.log(response.data);
+        
+    } catch (err) {
+      console.error('Error fetching data:', err);
+    }
+  
+
+  };
 
   return (
     <div>
-      <h2>{user.firstName}</h2>
+      <div>{userData.firstName}</div>
+      <div>{userData.lastName}</div>
     </div>
   );
-};
+}
 
 export default User;

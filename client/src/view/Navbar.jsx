@@ -1,4 +1,4 @@
-import React,{ useState } from 'react'
+import React,{ useState,useEffect } from 'react'
 import axios from "axios";
 import {useNavigate, Link} from 'react-router-dom';
 
@@ -8,6 +8,28 @@ const Navbar = () => {
       email: "",
       password: "",
   })
+  const [userData, setUserData] = useState([]);
+  useEffect(() => {
+    const storedUserInfo = localStorage.getItem('userInfo');
+
+    if (storedUserInfo) {
+      const email = JSON.parse(storedUserInfo);
+      fetchData(email);
+    }
+  }, []);
+
+
+  const fetchData = async (email) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/users/` + email);
+          setUserData(response.data);
+          console.log(response.data);
+        
+    } catch (err) {
+      console.error('Error fetching data:', err);
+    }
+  };
+  
   const [errors, setErrors] = useState({})
   const handleItemClick = (event) => {
       event.stopPropagation();
@@ -24,7 +46,8 @@ const Navbar = () => {
     const logout = () => {
     axios.post('http://localhost:8000/api/users/logout', {}, {withCredentials: true})
         .then(res => console.log(res),
-        navigate("/"))
+        localStorage.clear(),
+        window.location.reload())
         .catch(err => console.log(err))
   }
     
@@ -44,7 +67,8 @@ const Navbar = () => {
       if (formValidator()) {
           axios.post('http://localhost:8000/api/users/login', userInfo, {withCredentials: true})
               .then(res => console.log(res),
-                navigate("/Logged/:id"))
+                localStorage.setItem('userInfo', JSON.stringify( userInfo.email )),
+                window.location.reload())
               .catch(err => console.log(err))
           }
           else{
@@ -59,7 +83,16 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-light bg-dark ">
     <div className="container-fluid">
         <div className="collapse navbar-collapse" id="navbarCollapse">
+        <div>
+            {userData ? (
+                <h3 className="text-light display-7">{userData.firstName} {userData.lastName}</h3>
+            ) : (
+                <h3 className="text-light display-7">Guest</h3>
+            )}
+        </div>
+        
             <div className="navbar-nav ms-auto">
+
                 <a href="/" className="nav-item nav-link text-light ">Home</a>
                 <div className="dropdown">
                   <button className="nav-item nav-link text-light" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

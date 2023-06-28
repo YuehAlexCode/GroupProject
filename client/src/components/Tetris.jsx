@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import { createStage, checkCollision } from './gameHelpers';
 import { StyledTetrisWrapper, StyledTetris } from './styles/StyledTetris';
@@ -17,11 +18,59 @@ const Tetris = () => {
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
 
+  const[finalScore,setFinalScore]= useState("");
+
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
   const [score, setScore, rows, setRows, level, setLevel] = useGameStatus(
     rowsCleared
   );
+  useEffect(() => {
+    const storedUserInfo = localStorage.getItem('userInfo');
+
+    if (storedUserInfo) {
+      const email = JSON.parse(storedUserInfo);
+      fetchData(email);
+    }
+  }, []);
+
+
+  const fetchData = async (email) => {
+    try {
+      const response = await axios.get(`http://localhost:8000/api/users/` + email);
+          setFinalScore(response.data);
+          console.log(response.data);
+        
+    } catch (err) {
+      console.error('Error fetching data:', err);
+    }
+  
+
+
+
+    axios
+    .put(`http://localhost:8000/api/users/` + email, { highScore: finalScore })
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err.res.data.err.errors);
+    });
+
+  };
+  const handleGameOver = (score) => {
+    setFinalScore(score);
+
+
+};
+
+
+
+
+
+
+
+
 
   console.log('re-render');
 
@@ -114,7 +163,12 @@ const Tetris = () => {
         <aside className='shift'>
         <h3 className='title text-light'>Tetris Game</h3>
           {gameOver ? (
-            <Display gameOver={gameOver} text="Game Over" />
+            // <Display gameOver={gameOver} text="Game Over" />
+            <div>
+              <Display gameOver={gameOver} text="Game Over" />
+              <button className="btn btn-lg btn-danger" onClick={() => handleGameOver(score)}>{score}</button>
+            </div>
+            
           ) : (
             <div>
               <Display text={`Score: ${score}`} />
