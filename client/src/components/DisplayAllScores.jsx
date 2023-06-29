@@ -1,10 +1,12 @@
 import React, { useEffect,useState } from "react";
 import axios from "axios";
 import { StyledHighScore, StyledHighScoreTable } from './styles/StyledHighScore';
+import {useNavigate} from 'react-router-dom';
 
 const DisplayAll = (props) => {
-    const [userData, setUserData] = useState([]);
-    const [newEmail, newSetEmail] = useState([]);
+  const navigate = useNavigate();
+  const [userData, setUserData] = useState([]);
+  const [newEmail, newSetEmail] = useState([]);
     useEffect(() => {
       const storedUserInfo = localStorage.getItem('userInfo');
   
@@ -30,7 +32,9 @@ const DisplayAll = (props) => {
           const newList = userData.filter(
             (user, index) => user._id !== idFromBelow
           );
+          localStorage.clear()
           setUserData(newList);
+          window.location.reload();
         })
         .catch((err) => console.log(err.res));
     };
@@ -56,12 +60,19 @@ const DisplayAll = (props) => {
                       <td>
                       <div>
                           {newEmail === user.email ? (
-                             <button
+                            <div>
+                          <button className="smallButtonAll btn btn-warning btn-sm"
+                                onClick={() => navigate(`/users/edit`)}
+                                >
+                                  Edit
+                          </button>
+                          <button
                              onClick={() => handleDeleteUser(user._id)}
-                             className="btn btn-danger"
+                             className="smallButtonAll btn btn-danger btn-sm"
                            >
                              DELETE
                            </button>
+                           </div>
                           ) : (
                               <div className="text-light display-7">X</div>
                           )}
