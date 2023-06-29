@@ -17,9 +17,7 @@ import QuitButton from './QuitButton';
 const Tetris = () => {
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
-
-  const [finalScore,setFinalScore] = useState();
-
+  const [userInfo,SetUserInfo] = useState([]);
   const [gotEmail,SetGotEmail] = useState("");
   const [player, updatePlayerPos, resetPlayer, playerRotate] = usePlayer();
   const [stage, setStage, rowsCleared] = useStage(player, resetPlayer);
@@ -28,53 +26,43 @@ const Tetris = () => {
   );
   useEffect(() => {
     const storedUserInfo = localStorage.getItem('userInfo');
-
     if (storedUserInfo) {
       const email = JSON.parse(storedUserInfo);
-      fetchData(email);
-      SetGotEmail(email)
-    }
-  }, []);
-
-
-  const fetchData = async (email) => {
-    try {
-      const response = await axios.get(`http://localhost:8000/api/users/` + email);
-          setFinalScore(response.data);
-          console.log(response.data);
-        
-    } catch (err) {
-      console.error('Error fetching data:', err);
+      SetGotEmail(email);
     }
   
-
-
-
+    const handleGameOver = async () => {
+      if (gameOver && score > userInfo.highScore && userInfo.highScore !== null) {
+        try {
+          const response = await axios.put(`http://localhost:8000/api/users/${gotEmail}`, { highScore: score });
+          console.log('Score updated successfully!', response.data);
+          
+          setTimeout(() => {
+            window.location.reload();
+          }, 800);
+        } catch (error) {
+          console.error('Error updating score:', error);
+        }
+      }
+    };
+    
   
-
-  };
-  const handleButtonPress = async () => {
-    const scoreValue = Number(finalScore); // Convert the score to a number
-
-    if (isNaN(scoreValue)) {
-      console.error('Invalid score value:', finalScore);
-      console.log(finalScore)
-      return;
-    }
-    try {
-      const response = await axios.put(`http://localhost:8000/api/users/${gotEmail}`, { highScore: finalScore });
-      console.log('Score updated successfully!', response.data);
-    } catch (error) {
-      console.error('Error updating score:', error);
-    }
-  };
-
-
-
-
-
-
-
+    handleGameOver();
+    window.addEventListener('gameOver', handleGameOver);
+  
+    axios.get(`http://localhost:8000/api/users/` + gotEmail)
+      .then((res) => {
+        SetUserInfo(res.data);
+      })
+      .catch((error) => {
+        console.error('Error retrieving user data:', error);
+      });
+  
+    return () => {
+      window.removeEventListener('gameOver', handleGameOver);
+    };
+  }, [gameOver, gotEmail, score, userInfo.highScore]);
+  
 
 
   console.log('re-render');
@@ -104,12 +92,7 @@ const Tetris = () => {
   };
 
   const endGame = () => {
-    setStage(createStage());
     setDropTime(0);
-    resetPlayer();
-    setScore(0);
-    setLevel(0);
-    setRows(0);
     setGameOver(true);
   };
 
@@ -170,7 +153,13 @@ const Tetris = () => {
           {gameOver ? (
             <div>
               <Display gameOver={gameOver} text="Game Over" />
-              <button onClick={handleButtonPress}>Update Score {score}</button>
+              <div>
+                {score <= userInfo.highScore ? (
+                    <h6 className='scoreButton'>Your Score: {score}</h6>
+                ) : (
+                    <h6 className='scoreButton'>New High Score: {score}</h6>
+                )}
+              </div>
             </div>
             
           ) : (

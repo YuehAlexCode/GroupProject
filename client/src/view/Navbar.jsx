@@ -1,30 +1,31 @@
 import React,{ useState,useEffect } from 'react'
 import axios from "axios";
-import {useNavigate, Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 const Navbar = () => {
-  const navigate = useNavigate();
+
   const [userInfo, setUserInfo] = useState({
       email: "",
       password: "",
   })
   const [userData, setUserData] = useState([]);
+
   useEffect(() => {
     const storedUserInfo = localStorage.getItem('userInfo');
 
     if (storedUserInfo) {
       const email = JSON.parse(storedUserInfo);
-      fetchData(email);
+      getData(email);
     }
   }, []);
 
 
-  const fetchData = async (email) => {
+  const getData = async (email) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/users/` + email);
-          setUserData(response.data);
-          console.log(response.data);
-        
+      const res = await axios.get(`http://localhost:8000/api/users/` + email);
+          setUserData(res.data);
+          console.log(res.data);
+                  
     } catch (err) {
       console.error('Error fetching data:', err);
     }
@@ -54,7 +55,7 @@ const Navbar = () => {
 
   const formValidator = () => {
       let isValid = true
-      if (userInfo.email.length < 2) {
+      if (userInfo.email.length < 4) {
           return false
       }
       if (userInfo.password.length < 8) {
@@ -68,10 +69,12 @@ const Navbar = () => {
           axios.post('http://localhost:8000/api/users/login', userInfo, {withCredentials: true})
               .then(res => console.log(res),
                 localStorage.setItem('userInfo', JSON.stringify( userInfo.email )),
+                console.log(userData),
                 window.location.reload())
               .catch(err => console.log(err))
           }
           else{
+              alert('Please check your username and password')
               setErrors({
                   email: "Invalid Credentials",
                   password: "Invalid Credentials",
@@ -84,7 +87,7 @@ const Navbar = () => {
     <div className="container-fluid">
         <div className="collapse navbar-collapse" id="navbarCollapse">
         <div>
-            {userData ? (
+            {userData != null ? (
                 <h3 className="text-light display-7">{userData.firstName} {userData.lastName}</h3>
             ) : (
                 <h3 className="text-light display-7">Guest</h3>
@@ -94,6 +97,7 @@ const Navbar = () => {
             <div className="navbar-nav ms-auto">
 
                 <a href="/" className="nav-item nav-link text-light uil uil-house-user">Home</a>
+                
                 <div className="dropdown">
                   <button className="nav-item nav-link text-light uil uil-signin" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Login
@@ -118,6 +122,7 @@ const Navbar = () => {
                       </form>  
                   </div>
                 </div>
+                
                 <button href="#" onClick={logout} className="nav-item nav-link text-light uil uil-signout">Logout</button>
             </div>
         </div>

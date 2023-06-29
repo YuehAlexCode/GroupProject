@@ -44,7 +44,11 @@ const RegisterForm = () => {
         if (formValidator()) {
             axios.post('http://localhost:8000/api/users/register', userInfo, {withCredentials: true})
                 .then(res => console.log(res),
-                    navigate("/Logged/:id"))
+                    localStorage.setItem('userInfo', JSON.stringify( userInfo.email )),
+                    setTimeout(() => {
+                        navigate("/");
+                      }, 200)
+                    )
                 .catch(err => console.log(err))
             }
             else{
