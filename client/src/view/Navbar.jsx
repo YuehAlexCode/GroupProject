@@ -1,9 +1,9 @@
 import React,{ useState,useEffect } from 'react'
 import axios from "axios";
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 const Navbar = () => {
-
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
       email: "",
       password: "",
@@ -48,6 +48,7 @@ const Navbar = () => {
     axios.post('http://localhost:8000/api/users/logout', {}, {withCredentials: true})
         .then(res => console.log(res),
         localStorage.clear(),
+        navigate("/"),
         window.location.reload())
         .catch(err => console.log(err))
   }
